@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 
-const Signup = () => {
+const Signup = ({ }) => {
   const [input, setInput] = useState({ name: '', email: '', password: '' });
   const navigate = useNavigate();
 
@@ -12,7 +12,7 @@ const Signup = () => {
     axios.post('http://localhost:4000/api/auth/signup', input)
       .then((response) => {
         console.log(response);
-        navigate('/');
+        navigate('/dashboard');
       })
       .catch((error) => {
         console.log(error);

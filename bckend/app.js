@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
 import { errorMiddleware } from "./error/error.js";
-import router from "./routes/authRoute.js";
+import router from "./routes/Routes.js";
 
 const app = express();
 dotenv.config({ path: "./config/config.env" });

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 
-const Login = () => {
+const Login = ({ }) => {
     const [input, setInput] = useState({ email: '', password: '' });
     const [error, setError] = useState('');
     const navigate = useNavigate();
@@ -17,7 +17,8 @@ const Login = () => {
         axios.post('http://localhost:4000/api/auth/login', input)
             .then((response) => {
                 console.log(response);
-                navigate('/');
+                localStorage.setItem('token', response.data.token);
+                navigate('/dashboard');
             })
             .catch((error) => {
                 console.error('Login error:', error);
@@ -33,6 +34,17 @@ const Login = () => {
         }));
         if (error) setError('');
     };
+
+    const getUser =async () => {
+        try {
+            const response = await axios.get(
+                `http://localhost:4000/api/auth/getAllUser`, 
+            );
+            console.log(response.data);
+        } catch (error) {
+            console.error("Error fetching user:", error.response.data);
+        }
+    }
 
     return (
         <div
