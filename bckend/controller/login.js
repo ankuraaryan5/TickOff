@@ -23,6 +23,7 @@ export const LoginController = async (req, res, next) => {
             success: true,
             message: "User logged in successfully",
             token,
+            user
         });
     } catch (error) {
         if (error.name === "ValidationError") {

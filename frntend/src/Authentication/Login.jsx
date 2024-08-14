@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
+import { useDispatch } from "react-redux";
+import { login } from "../Store/userSlice";
 
 const Login = ({ }) => {
     const [input, setInput] = useState({ email: '', password: '' });
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleLogin = (e) => {
         e.preventDefault();
@@ -13,11 +16,12 @@ const Login = ({ }) => {
             setError('Please fill in both fields.');
             return;
         }
-
         axios.post('http://localhost:4000/api/auth/login', input)
             .then((response) => {
                 console.log(response);
                 localStorage.setItem('token', response.data.token);
+                localStorage.setItem('user', JSON.stringify(response.data.user));
+                dispatch(login({ token: response.data.token, user: response.data.user }));
                 navigate('/dashboard');
             })
             .catch((error) => {

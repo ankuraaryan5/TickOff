@@ -2,8 +2,11 @@ import React, { useEffect } from "react";
 import Sidebar from "./Sidebar";
 import Hero from "./Hero";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 function Dashboard() {
+  const user = useSelector((state) => state.user)
+    console.log(user);
   const fetchTask = async () => {
     try {
       const response = await axios.get(
@@ -18,7 +21,7 @@ function Dashboard() {
   useEffect(() => {
     
     fetchTask(); 
-  })
+  },[])
   return (
     <div
       className="flex"
@@ -31,7 +34,7 @@ function Dashboard() {
         <Sidebar />
       </div>
       <div className="w-4/5">
-        <Hero />
+        <Hero/>
       </div>
     </div>
   );

@@ -1,18 +1,25 @@
 import axios from 'axios'
 import React,{useState } from 'react'
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
 
 function NewTask() {
-    const [task, setTask] = useState({ name: '', description: '', time: '' });
+    const [task, setTask] = useState({ name: '', description: '', time: '', visiblity:'', createdBy: '' });
     const navigate = useNavigate();
     const token = localStorage.getItem('token')
+    const user = useSelector((state) => state.user)
+    console.log(user);
+
     const createNewTask = (e) => {
         e.preventDefault()
-        if (!task.name ||   !task.time) {
+        task.createdBy = user.user.email
+        if (!task.name ||  !task.time ) {
             console.log('Please fill in all fields');
             return;
             
         }
+        console.log(task);
+        
         axios.post('http://localhost:4000/api/auth/createTask',task,{
             headers: {
                 Authorization: `Bearer ${token}`
@@ -20,7 +27,7 @@ function NewTask() {
         })
         .then((response) => {
             console.log(response);
-            setTask({ name: '', description: '', time: '' });
+            setTask({ name: '', description: '', time: '', visiblity: '', createdBy: '' });
             navigate('/dashboard')
         })
         .catch((error) => {
@@ -33,6 +40,7 @@ function NewTask() {
             <input type="text" name='task' className='w-full h-1/6 rounded bg-slate-200 text-center' placeholder='Enter task' required value={task.name} onChange={(e) => setTask({ ...task, name: e.target.value })}/>
             <input type="text" name='description' className='w-full h-1/6 rounded bg-slate-200 text-center' placeholder='Enter description' value={task.description} onChange={(e) => setTask({ ...task, description: e.target.value })} />
             <input type="time" name='time' className='w-1/6 h-1/6 rounded bg-slate-200 text-center' placeholder='Completed within' required value={task.time} onChange={(e) => setTask({ ...task, time: e.target.value })}/>
+            <input type="checkbox" name='time' className='w-1/6 h-1/6 rounded bg-slate-200 text-center' placeholder='Completed within' required value={task.visiblity} onChange={(e) => setTask({ ...task, visiblity: e.target.checked ? 'public' : 'private' })}/>
             <button type="submit" className='w-1/6 h-1/6 rounded bg-slate-200 text-center'>Add Task</button>
         </form>
     </div>

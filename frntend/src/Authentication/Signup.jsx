@@ -1,9 +1,12 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { login } from '../Store/userSlice';
 
 
 const Signup = ({ }) => {
+  const dispatch = useDispatch();
   const [input, setInput] = useState({ name: '', email: '', password: '' });
   const navigate = useNavigate();
 
@@ -12,7 +15,9 @@ const Signup = ({ }) => {
     axios.post('http://localhost:4000/api/auth/signup', input)
       .then((response) => {
         console.log(response);
+        dispatch(login({ token: response.data.token, user: response.data.user }));
         navigate('/dashboard');
+
       })
       .catch((error) => {
         console.log(error);

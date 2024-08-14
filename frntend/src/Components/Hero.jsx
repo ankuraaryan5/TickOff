@@ -6,6 +6,7 @@ import HaveToDo from "./Works/HaveToDo";
 import Skippable from "./Works/Skippable";
 
 function Hero() {
+  console.log()
   return (
     <div className="h-screen w-full bg-transparent flex flex-col items-center justify-center">
       <div className="h-1/6 w-full border-2 text-center">
