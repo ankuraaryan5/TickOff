@@ -2,7 +2,7 @@ import Task from "../models/taskSchema.js";
 import ErrorHandler from "../error/error.js";
 
 export const createTask = async (req, res, next) => {
-  const { name, description, time,visiblity, createdBy } = req.body;
+  const { name, description, time,visibility, createdBy,date } = req.body;
   
   if (!name || !time) {
     return next(new ErrorHandler("Please enter all fields", 400));
@@ -12,9 +12,10 @@ export const createTask = async (req, res, next) => {
     const task = await Task.create({
       name,
       description,
+      date,
       time,
-      visiblity,
-      createdBy
+      visibility,
+      createdBy,
     });
 
     res.status(201).json({

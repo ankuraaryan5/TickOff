@@ -9,7 +9,6 @@ import { useSelector } from 'react-redux';
 function App() {
   const user = useSelector((state) => state.user);
   console.log(user);
-  console.log(user.token);
   return (
     <div className="App">
       <Router>
@@ -28,5 +27,4 @@ function App() {
     </div>
   );
 }
-
 export default App;

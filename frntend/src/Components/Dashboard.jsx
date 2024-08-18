@@ -1,10 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useState,useEffect } from "react";
 import Sidebar from "./Sidebar";
 import Hero from "./Hero";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getTasks } from "../Store/taskSlice";
 
 function Dashboard() {
+  const [task, setTasks] = useState([]);
+  const dispatch=useDispatch();
   const user = useSelector((state) => state.user)
     console.log(user);
   const fetchTask = async () => {
@@ -12,7 +15,8 @@ function Dashboard() {
       const response = await axios.get(
         `http://localhost:4000/api/auth/getAllTask`
       );
-      console.log(response.data);
+      console.log(response.data);      
+      dispatch(getTasks({task: response.data.task }));
     } catch (error) {
       console.error("Error fetching task:", error.response.data);
     }
