@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 
 const taskSlice = createSlice({
     name: "task",
@@ -15,6 +16,6 @@ const taskSlice = createSlice({
     },
 });
 
-export const { addTask,getTasks } = taskSlice.actions;
+export const { addTask,getTasks,updateTask } = taskSlice.actions;
 
 export default taskSlice.reducer;

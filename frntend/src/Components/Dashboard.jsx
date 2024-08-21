@@ -8,15 +8,20 @@ import { getTasks } from "../Store/taskSlice";
 function Dashboard() {
   const [task, setTasks] = useState([]);
   const dispatch=useDispatch();
-  const user = useSelector((state) => state.user)
-    console.log(user);
+  const user = useSelector((state) => state.user.user)
+  console.log(user);
   const fetchTask = async () => {
     try {
       const response = await axios.get(
         `http://localhost:4000/api/auth/getAllTask`
       );
-      console.log(response.data);      
-      dispatch(getTasks({task: response.data.task }));
+      console.log(response.data);
+      (response.data.task).filter((task) => {
+        if (task.createdBy === user.email) {
+          setTasks(task);
+          dispatch(getTasks({task: response.data.task }));
+        }
+      })
     } catch (error) {
       console.error("Error fetching task:", error.response.data);
     }
@@ -38,7 +43,7 @@ function Dashboard() {
         <Sidebar />
       </div>
       <div className="w-4/5">
-        <Hero/>
+        <Hero user={user}/>
       </div>
     </div>
   );

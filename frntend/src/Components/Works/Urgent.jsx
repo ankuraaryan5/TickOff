@@ -1,49 +1,49 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 
-function Urgent() {
-  const works = useSelector((state) => state.task.tasks);
-  console.log(works);
-  const currentTime = new Date();
+function Urgent({ urgent }) {
+  const dispatch = useDispatch();
+  const [clickedTaskId, setClickedTaskId] = useState(null);
 
-  // Filter tasks where the task time is less than 4 hours from now
-  const filteredTasks = works.filter((task) => {
-    // Create a Date object for the task's time
-    const [hours, minutes] = task.time.split(":");
-    // console.log("task time in hours and minutes -> ", hours,":", minutes);
-    const taskTime = new Date(currentTime);
-    // console.log("current time -> ", taskTime);
-    taskTime.setHours(hours);
-    taskTime.setMinutes(minutes);
-    // const updatedHours = taskTime.getHours();
-    // const updatedMinutes = taskTime.getMinutes();
-    // console.log("Task time (hours):", updatedHours);
-    // console.log("Task time (minutes):", updatedMinutes);
-    // console.log("Task time:", taskTime.toLocaleTimeString());
-    const timeDifference = (taskTime - currentTime) / (1000 * 60 * 60); // milliseconds to hours
-    // console.log("timeDifference -> ", timeDifference);
+  const handleCompletion = async (taskId) => {
+    setClickedTaskId(taskId);
 
-    // Return true if the task's time is less than 3 hours from now
-    return timeDifference > 0 && timeDifference < 3;
-  });
-
-  console.log(filteredTasks)
-
-  const today = new Date().toISOString().split('T')[0];
-  const tasksToday = filteredTasks.filter(task => {
-    const taskDate = new Date(task.date).toISOString().split('T')[0];
-    return taskDate === today;
-  });
+    console.log('Clicked task ID:', taskId);
+    
+  };
 
   return (
-    <div className="urgent flex flex-col items-center">
+    <div className="urgent flex flex-col items-center p-1 gap-2">
       <h1 className="text-3xl font-bold text-[#FFF]">Urgent</h1>
-      {tasksToday.length > 0 ? (
-        tasksToday.map((task) => (
-          <div key={task._id}>
-            <h2>{task.name}</h2>
-            <p>{task.description}</p>
-            <p>{task.time}</p>
+      {urgent.length > 0 ? (
+        urgent.map((task) => (
+          <div
+            key={task._id}
+            className="flex flex-col items-left justify-left text-left p-1 bg-[#fff] rounded-xl"
+          >
+            <h2 className="text-2xl font-bold">{task.name}</h2>
+            <p className="text-sm">{task.description}</p>
+            <p className="text-lg font-bold">at {task.time}</p>
+            <div className="w-full flex justify-between items-center">
+              <button className="text-lg font-bold flex items-center">
+                <svg
+                  viewBox="0 0 1024 1024"
+                  fill="currentColor"
+                  height="1em"
+                  width="1em"
+                >
+                  <path d="M880 836H144c-17.7 0-32 14.3-32 32v36c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-36c0-17.7-14.3-32-32-32zm-622.3-84c2 0 4-.2 6-.5L431.9 722c2-.4 3.9-1.3 5.3-2.8l423.9-423.9a9.96 9.96 0 000-14.1L694.9 114.9c-1.9-1.9-4.4-2.9-7.1-2.9s-5.2 1-7.1 2.9L256.8 538.8c-1.5 1.5-2.4 3.3-2.8 5.3l-29.5 168.2a33.5 33.5 0 009.4 29.8c6.6 6.4 14.9 9.9 23.8 9.9z" />
+                </svg>Edit
+              </button>
+              <div className="flex items-center">
+                <button
+                  type="button"
+                  className={`rounded border-2 border-gray-900 w-5 h-5 ${clickedTaskId === task._id ? "bg-green-500" : ""}`}
+                  onClick={() => handleCompletion(task._id)}
+                ></button>
+                <p className="text-lg font-bold">Done</p>
+              </div>
+            </div>
           </div>
         ))
       ) : (
